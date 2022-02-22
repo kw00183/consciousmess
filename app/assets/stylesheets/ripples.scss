@@ -4,20 +4,18 @@
 .ripples {
   margin: 0;
   padding: 0.5em;
-  a {
-    padding: 0.354em 0.5em;
-    border-radius: 0.354em;
-  }
+
   table {
     border-collapse: collapse;
   }
   td {
-    padding: 0.5em;
+    padding: 0 0.5em;
     margin: 0;
+    border: 3px solid #FFFFFF;
   }
 
   tr.list_line_odd {
-    background-color: #b3ecff;
+    background-color: #B3ECFF;
   }
 
   td.message {

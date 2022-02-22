@@ -1,31 +1,54 @@
-<p id="notice"><%= notice %></p>
+<% if notice %>
+  <aside id="notice"><%= notice %></aside>
+<% end %>
 
 <h1>Ripples</h1>
 
 <table>
-  <thead>
+  <tfoot>
+    <tr>
+      <td colspan="5">
+        <%= link_to 'New Ripple', new_ripple_path %>
+      </td>
+    </tr>
+  </tfoot>
+  <tbody>
     <tr>
       <th>Name</th>
-      <th>Url</th>
       <th>Message</th>
-      <th colspan="3"></th>
+      <th>Posted</th>
+      <th></th>
     </tr>
-  </thead>
-
-  <tbody>
     <% @ripples.each do |ripple| %>
-      <tr>
-        <td><%= ripple.name %></td>
-        <td><%= ripple.url %></td>
-        <td><%= ripple.message %></td>
-        <td><%= link_to 'Show', ripple %></td>
-        <td><%= link_to 'Edit', edit_ripple_path(ripple) %></td>
-        <td><%= link_to 'Destroy', ripple, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      <tr class="<%= cycle('list_line_odd', 'list_line_even') %>">
+
+        <td>
+          <p>
+            <% if ripple.url == '' %>
+            <%= ripple.name %>
+            <% else %>
+            <%= link_to ripple.name, ripple.url %>
+            <% end %>
+          </p>
+        </td>
+
+        <td>
+          <p>
+            <%= truncate(strip_tags(ripple.message),
+                         length: 80) %>
+          </p>
+        </td>
+
+        <td>
+          <p>
+            <%= ripple.updated_at %>
+          </p>
+        </td>
+
+        <td class="actions">
+          <%= link_to 'Show', ripple %>
+        </td>
       </tr>
     <% end %>
   </tbody>
 </table>
-
-<br>
-
-<%= link_to 'New Ripple', new_ripple_path %>
