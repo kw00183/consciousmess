@@ -74,4 +74,4 @@ Or, if you want to change your default branch name to main, do this:
 
 >bin/rails generate scaffold Ripple name:string website:string message:string
 >bin/rails db:migrate
-Push it
+>​​bin/rails​​ ​​server​
