@@ -12,18 +12,18 @@
   <% end %>
 
   <div class="field">
-    <%= form.label :name %>
+    <p>Your name or alias (required)</p>
     <%= form.text_field :name %>
   </div>
 
   <div class="field">
-    <%= form.label :message %>
-    <%= form.text_area :message, rows: 10, cols: 60 %>
+    <p>A website, yours or otherwise (optional)</p>
+    <%= form.text_field :url %>
   </div>
 
   <div class="field">
-    <%= form.label :url %>
-    <%= form.text_field :url %>
+    <p>Your message/note/quote/rant (required)</p>
+    <%= form.text_area :message, rows: 20, cols: 60 %>
   </div>
 
   <div class="actions">

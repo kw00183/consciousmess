@@ -1,17 +1,12 @@
-<p id="notice"><%= notice %></p>
+<% if notice %>
+  <aside id="notice"><%= notice %></aside>
+<% end %>
 
-<p>
-  <strong>Name:</strong>
-  <%= @ripple.name %>
-</p>
+<h3>
+  <strong><%= @ripple.name %> said:</strong>
+</h3>
 
-<p>
-  <strong>Url:</strong>
-  <%= @ripple.url %>
-</p>
-
-<p>
-  <strong>Message:</strong>
+<p class='large_ripple_text'>
   <%= @ripple.message %>
 </p>
 
