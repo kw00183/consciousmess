@@ -75,3 +75,11 @@ Or, if you want to change your default branch name to main, do this:
 >bin/rails generate scaffold Ripple name:string website:string message:string
 >bin/rails db:migrate
 >​​bin/rails​​ ​​server​
+
+---import csv
+rake csv_model_import[conciousmess.csv,ripple]
+
+save file as utf-8 text file in excel
+remove any special character weird symbols
+add gem 'utf8-cleaner' to Gemfile and run bundle
+you need an import.rake file in the lib>tasks folder
