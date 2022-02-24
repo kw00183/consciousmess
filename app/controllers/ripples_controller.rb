@@ -11,6 +11,11 @@ class RipplesController < ApplicationController
   def show
   end
 
+  def add_session(ripple)
+    session[:page] = @ripple
+  end
+  helper_method :add_session
+
   # GET /ripples/new
   def new
     @ripple = Ripple.new
