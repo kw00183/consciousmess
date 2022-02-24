@@ -1,20 +1,29 @@
 class RipplesController < ApplicationController
-  before_action :set_ripple, only: %i[ show edit update destroy ]
+  before_action :set_ripple, only: %i[ show update ]
+  before_action :restrict_destroy_edit, only: [:edit, :destroy]
+
+  RIPPLES_MAX = 10
 
   # GET /ripples or /ripples.json
   def index
     @ripples = Ripple.all
-    @ripples = Ripple.order('created_at DESC')
+    @ripples = Ripple.order(:id).limit(RIPPLES_MAX).offset(RIPPLES_MAX)
   end
 
   # GET /ripples/1 or /ripples/1.json
   def show
   end
 
-  def add_session(ripple)
-    session[:page] = @ripple
+  # page methods
+  def add_session(page)
+    session[:page] = @page
   end
   helper_method :add_session
+
+  def newest(page)
+    session[:page] = @page
+  end
+  helper_method :newest
 
   # GET /ripples/new
   def new
