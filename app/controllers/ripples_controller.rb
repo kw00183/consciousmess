@@ -2,7 +2,8 @@ class RipplesController < ApplicationController
   before_action :set_ripple, only: %i[ show update ]
   before_action :restrict_destroy_edit, only: [:edit, :destroy]
 
-  helper_method :set_session
+  helper_method :set_max_range_id
+  helper_method :set_min_range_id
   helper_method :maximum_ripple_id
   helper_method :newest
   helper_method :previous
@@ -13,19 +14,21 @@ class RipplesController < ApplicationController
 
   def inititialize
     self.maximum_ripple_index_id
+    session[:max_ripple_id] = maximum_ripple_index_id
+    session[:min_ripple_id] = 0
   end
 
-  def set_session(id)
-    session[:ripple_id] = id
+  def set_max_range_id(id)
+    session[:max_ripple_id] = id
   end
 
-  def all
-    @ripples = Ripple.all.order("created_at DESC").limit(RIPPLES_MAX)
+  def set_min_range_id(id)
+    session[:min_ripple_id] = id
   end
 
   # GET /ripples or /ripples.json
   def index
-    @display_ripples = self.all
+    @ripples = Ripple.all.order("created_at DESC").where(id: session[:min_ripple_id]..session[:max_ripple_id]).limit(RIPPLES_MAX)
   end
 
   # GET /ripples/1 or /ripples/1.json
@@ -42,7 +45,9 @@ class RipplesController < ApplicationController
     if maximum_ripple_index_id - 9 < 0
       @minimum_range_id = maximum_ripple_index_id - 9
     end
-    @display_ripples = self.all.where(id: @minimum_range_id..@maximum_range_id)
+    set_min_range_id(@minimum_range_id)
+    set_max_range_id(@maximum_range_id)
+    redirect_to ripples_path
   end
 
   def previous
@@ -53,12 +58,14 @@ class RipplesController < ApplicationController
 
   def oldest
     @minimum_range_id = 0
-    if @maximum_ripple_index_id < 8
+    if maximum_ripple_index_id < 8
       @maximum_range_id = @maximum_ripple_index_id
     else
-      @maximum_range_id = (@maximum_ripple_index_id / 10) - 1
+      @maximum_range_id = (maximum_ripple_index_id / 10)
     end
-    @display_ripples = self.all.where(id: @minimum_range_id..@maximum_range_id)
+    set_min_range_id(@minimum_range_id)
+    set_max_range_id(@maximum_range_id)
+    redirect_to ripples_path
   end
 
   # GET /ripples/new

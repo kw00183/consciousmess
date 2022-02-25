@@ -6,10 +6,10 @@
   <tfoot>
     <tr>
       <td colspan="5">
-        <%= link_to 'Newest', ripple_newest_path %> |
-        <%= link_to 'Previous 10 Ripples', ripple_previous_path %> |
-        <%= link_to 'Next 10 Ripples', ripple_next_path %> |
-        <%= link_to 'Oldest', ripple_oldest_path %> |
+        <%= link_to 'Newest', ripples_newest_path %> |
+        <%= link_to 'Previous 10 Ripples', ripples_previous_path %> |
+        <%= link_to 'Next 10 Ripples', ripples_next_path %> |
+        <%= link_to 'Oldest', ripples_oldest_path %> |
         <%= link_to 'New Ripple', new_ripple_path %>
       </td>
     </tr>
@@ -21,7 +21,7 @@
       <th>Posted</th>
       <th></th>
     </tr>
-    <% @display_ripples.each do |ripple| %>
+    <% @ripples.each do |ripple| %>
 
       <tr class="<%= cycle('list_line_odd', 'list_line_even') %>">
 
