@@ -2,28 +2,64 @@ class RipplesController < ApplicationController
   before_action :set_ripple, only: %i[ show update ]
   before_action :restrict_destroy_edit, only: [:edit, :destroy]
 
+  helper_method :set_session
+  helper_method :maximum_ripple_id
+  helper_method :newest
+  helper_method :previous
+  helper_method :next
+  helper_method :oldest
+
   RIPPLES_MAX = 10
+
+  def inititialize
+    self.maximum_ripple_index_id
+  end
+
+  def set_session(id)
+    session[:ripple_id] = id
+  end
+
+  def all
+    @ripples = Ripple.all.order("created_at DESC").limit(RIPPLES_MAX)
+  end
 
   # GET /ripples or /ripples.json
   def index
-    @ripples = Ripple.all
-    @ripples = Ripple.order(:id).limit(RIPPLES_MAX).offset(RIPPLES_MAX)
+    @display_ripples = self.all
   end
 
   # GET /ripples/1 or /ripples/1.json
   def show
   end
 
-  # page methods
-  def add_session(page)
-    session[:page] = @page
+  def maximum_ripple_index_id
+    maximum_ripple_index_id = Ripple.maximum("id")
   end
-  helper_method :add_session
 
-  def newest(page)
-    session[:page] = @page
+  def newest
+    @minimum_range_id = 0
+    @maximum_range_id = maximum_ripple_index_id
+    if maximum_ripple_index_id - 9 < 0
+      @minimum_range_id = maximum_ripple_index_id - 9
+    end
+    @display_ripples = self.all.where(id: @minimum_range_id..@maximum_range_id)
   end
-  helper_method :newest
+
+  def previous
+  end
+
+  def next
+  end
+
+  def oldest
+    @minimum_range_id = 0
+    if @maximum_ripple_index_id < 8
+      @maximum_range_id = @maximum_ripple_index_id
+    else
+      @maximum_range_id = (@maximum_ripple_index_id / 10) - 1
+    end
+    @display_ripples = self.all.where(id: @minimum_range_id..@maximum_range_id)
+  end
 
   # GET /ripples/new
   def new

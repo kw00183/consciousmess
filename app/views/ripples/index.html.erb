@@ -6,10 +6,10 @@
   <tfoot>
     <tr>
       <td colspan="5">
-        <%= link_to 'Newest', newest %> |
-        Previous 10 Ripples |
-        Next 10 Ripples |
-        Oldest |
+        <%= link_to 'Newest', ripple_newest_path %> |
+        <%= link_to 'Previous 10 Ripples', ripple_previous_path %> |
+        <%= link_to 'Next 10 Ripples', ripple_next_path %> |
+        <%= link_to 'Oldest', ripple_oldest_path %> |
         <%= link_to 'New Ripple', new_ripple_path %>
       </td>
     </tr>
@@ -21,11 +21,7 @@
       <th>Posted</th>
       <th></th>
     </tr>
-    <% @ripples.each_with_index do |ripple, index| %>
-
-      <% if index == 0 %>
-        <% add_session(@page) %>
-      <% end %>
+    <% @display_ripples.each do |ripple| %>
 
       <tr class="<%= cycle('list_line_odd', 'list_line_even') %>">
 
@@ -34,7 +30,7 @@
             <% if ripple.url == '' %>
             <%= ripple.name %>
             <% else %>
-            <%= link_to ripple.name, ripple.url %>
+            <%= link_to ripple.name, ripple.url, :target => "_blank" %>
             <% end %>
           </p>
         </td>
