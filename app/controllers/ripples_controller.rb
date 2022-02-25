@@ -1,4 +1,6 @@
 class RipplesController < ApplicationController
+  include ActionController::Helpers
+
   before_action :set_ripple, only: %i[ show update ]
   before_action :restrict_destroy_edit, only: [:edit, :destroy]
 
@@ -14,8 +16,6 @@ class RipplesController < ApplicationController
 
   def inititialize
     self.maximum_ripple_index_id
-    session[:max_ripple_id] = maximum_ripple_index_id
-    session[:min_ripple_id] = 0
   end
 
   def set_max_range_id(id)
@@ -26,9 +26,13 @@ class RipplesController < ApplicationController
     session[:min_ripple_id] = id
   end
 
+  def reset_session
+    session.clear
+  end
+
   # GET /ripples or /ripples.json
   def index
-    @ripples = Ripple.all.order("created_at DESC").where(id: session[:min_ripple_id]..session[:max_ripple_id]).limit(RIPPLES_MAX)
+    @ripples = Ripple.all.where(id: session[:min_ripple_id]..session[:max_ripple_id]).order("created_at DESC").limit(RIPPLES_MAX)
   end
 
   # GET /ripples/1 or /ripples/1.json
@@ -42,7 +46,7 @@ class RipplesController < ApplicationController
   def newest
     @minimum_range_id = 0
     @maximum_range_id = maximum_ripple_index_id
-    if maximum_ripple_index_id - 9 < 0
+    if maximum_ripple_index_id - 9 < 1
       @minimum_range_id = maximum_ripple_index_id - 9
     end
     set_min_range_id(@minimum_range_id)
@@ -51,9 +55,33 @@ class RipplesController < ApplicationController
   end
 
   def previous
+    if session[:max_ripple_id] + 10 > maximum_ripple_index_id
+      @maximum_range_id = maximum_ripple_index_id
+    else
+      @maximum_range_id = session[:max_ripple_id] + 10
+    end
+    @minimum_range_id = @maximum_range_id - 9
+    set_min_range_id(@minimum_range_id)
+    set_max_range_id(@maximum_range_id)
+    redirect_to ripples_path
   end
 
   def next
+    if session[:max_ripple_id] - 10 >= 1
+      @maximum_range_id = session[:max_ripple_id] - 10
+    else
+      @maximum_range_id = 1
+    end
+
+    if @maximum_range_id - 9 >= 1
+      @minimum_range_id = @maximum_range_id - 9
+    else
+      @minimum_range_id = 1
+    end
+    @minimum_range_id = @maximum_range_id - 9
+    set_min_range_id(@minimum_range_id)
+    set_max_range_id(@maximum_range_id)
+    redirect_to ripples_path
   end
 
   def oldest
@@ -61,7 +89,7 @@ class RipplesController < ApplicationController
     if maximum_ripple_index_id < 8
       @maximum_range_id = @maximum_ripple_index_id
     else
-      @maximum_range_id = (maximum_ripple_index_id / 10)
+      @maximum_range_id = (maximum_ripple_index_id / 10) - 1
     end
     set_min_range_id(@minimum_range_id)
     set_max_range_id(@maximum_range_id)

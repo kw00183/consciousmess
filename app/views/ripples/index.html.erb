@@ -3,19 +3,9 @@
 <% end %>
 
 <table>
-  <tfoot>
-    <tr>
-      <td colspan="5">
-        <%= link_to 'Newest', ripples_newest_path %> |
-        <%= link_to 'Previous 10 Ripples', ripples_previous_path %> |
-        <%= link_to 'Next 10 Ripples', ripples_next_path %> |
-        <%= link_to 'Oldest', ripples_oldest_path %> |
-        <%= link_to 'New Ripple', new_ripple_path %>
-      </td>
-    </tr>
-  </tfoot>
   <tbody>
     <tr>
+      <th>ID</th>
       <th>Name</th>
       <th>Message</th>
       <th>Posted</th>
@@ -24,6 +14,12 @@
     <% @ripples.each do |ripple| %>
 
       <tr class="<%= cycle('list_line_odd', 'list_line_even') %>">
+
+        <td>
+          <p>
+            <%= ripple.id %>
+          </p>
+        </td>
 
         <td>
           <p>
@@ -54,4 +50,15 @@
       </tr>
     <% end %>
   </tbody>
+  <tfoot>
+    <tr>
+      <td colspan="5">
+        <%= link_to 'Newest', ripples_newest_path %> |
+        <%= previous_link('Previous 10 Ripples', ripples_previous_path) %> |
+        <%= next_link('Next 10 Ripples', ripples_next_path) %> |
+        <%= link_to 'Oldest', ripples_oldest_path %> |
+        <%= link_to 'New Ripple', new_ripple_path %>
+      </td>
+    </tr>
+  </tfoot>
 </table>
