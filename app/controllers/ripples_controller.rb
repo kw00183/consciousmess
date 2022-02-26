@@ -4,9 +4,11 @@ class RipplesController < ApplicationController
   before_action :set_ripple, only: %i[ show update ]
   before_action :restrict_destroy_edit, only: [:edit, :destroy]
 
-  helper_method :set_max_range_id
-  helper_method :set_min_range_id
+  helper_method :set_page_number
+  helper_method :index_offset
+  helper_method :reset_session
   helper_method :maximum_ripple_id
+  helper_method :maximum_page_number
   helper_method :newest
   helper_method :previous
   helper_method :next
@@ -15,15 +17,16 @@ class RipplesController < ApplicationController
   RIPPLES_MAX = 10
 
   def inititialize
-    self.maximum_ripple_index_id
+    session[:page_number] = Hash.new
+    self.maximum_ripple_id
+    self.maximum_page_number
+    self.page_number(0)
+
+    @ripple_offset = maximum_ripple_id
   end
 
-  def set_max_range_id(id)
-    session[:max_ripple_id] = id
-  end
-
-  def set_min_range_id(id)
-    session[:min_ripple_id] = id
+  def set_page_number(page_number)
+    session[:page_number] = page_number
   end
 
   def reset_session
@@ -32,68 +35,63 @@ class RipplesController < ApplicationController
 
   # GET /ripples or /ripples.json
   def index
-    @ripples = Ripple.all.where(id: session[:min_ripple_id]..session[:max_ripple_id]).order("created_at DESC").limit(RIPPLES_MAX)
+    self.index_offset(@ripple_offset)
+    @ripples = @ripples
+  end
+
+  def index_offset(ripple_offset)
+    @ripple_offset = ripple_offset
+    @ripples = Ripple.all.order("id DESC").offset(@ripple_offset).limit(RIPPLES_MAX)
   end
 
   # GET /ripples/1 or /ripples/1.json
   def show
   end
 
-  def maximum_ripple_index_id
-    maximum_ripple_index_id = Ripple.maximum("id")
+  def maximum_ripple_id
+    maximum_ripple_id = Ripple.maximum("id")
+  end
+
+  def maximum_page_number
+    if maximum_ripple_id % 10
+      maximum_page_number = maximum_ripple_id / 10
+    else
+      maximum_page_number = (maximum_ripple_id/ 10) - 1
+    end
   end
 
   def newest
-    @minimum_range_id = 0
-    @maximum_range_id = maximum_ripple_index_id
-    if maximum_ripple_index_id - 9 < 1
-      @minimum_range_id = maximum_ripple_index_id - 9
-    end
-    set_min_range_id(@minimum_range_id)
-    set_max_range_id(@maximum_range_id)
-    redirect_to ripples_path
+    page_number = 0
+    self.set_page_number(0)
+    self.index_offset(@maximum_ripple_id)
+    render :index
   end
 
   def previous
-    if session[:max_ripple_id] + 10 > maximum_ripple_index_id
-      @maximum_range_id = maximum_ripple_index_id
-    else
-      @maximum_range_id = session[:max_ripple_id] + 10
+    page_number = session[:page_number]
+
+    if page_number > 0
+      previous_page = page_number - 1
+      self.set_page_number(previous_page)
+      @ripple_offset = previous_page * RIPPLES_MAX
+      self.index_offset(@ripple_offset)
+      render :index
     end
-    @minimum_range_id = @maximum_range_id - 9
-    set_min_range_id(@minimum_range_id)
-    set_max_range_id(@maximum_range_id)
-    redirect_to ripples_path
   end
 
   def next
-    if session[:max_ripple_id] - 10 >= 1
-      @maximum_range_id = session[:max_ripple_id] - 10
-    else
-      @maximum_range_id = 1
-    end
+    page_number = session[:page_number]
 
-    if @maximum_range_id - 9 >= 1
-      @minimum_range_id = @maximum_range_id - 9
-    else
-      @minimum_range_id = 1
+    if page_number < maximum_page_number
+      next_page = page_number + 1
+      self.set_page_number(next_page)
+      @ripple_offset = next_page * RIPPLES_MAX
+      self.index_offset(@ripple_offset)
+      render :index
     end
-    @minimum_range_id = @maximum_range_id - 9
-    set_min_range_id(@minimum_range_id)
-    set_max_range_id(@maximum_range_id)
-    redirect_to ripples_path
   end
 
   def oldest
-    @minimum_range_id = 0
-    if maximum_ripple_index_id < 8
-      @maximum_range_id = @maximum_ripple_index_id
-    else
-      @maximum_range_id = (maximum_ripple_index_id / 10) - 1
-    end
-    set_min_range_id(@minimum_range_id)
-    set_max_range_id(@maximum_range_id)
-    redirect_to ripples_path
   end
 
   # GET /ripples/new
