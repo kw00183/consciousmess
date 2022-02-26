@@ -5,6 +5,11 @@
 <table>
   <tbody>
     <tr>
+      <td colspan="5">
+        <p>Page: <%= session[:page_number] %></p>
+      </td>
+    </tr>
+    <tr>
       <th>ID</th>
       <th>Name</th>
       <th>Message</th>
@@ -53,10 +58,10 @@
   <tfoot>
     <tr>
       <td colspan="5">
-        <%= link_to 'Newest', ripples_newest_path %> |
+        <%= newest_link('Newest', ripples_newest_path) %> |
         <%= previous_link('Previous 10 Ripples', ripples_previous_path) %> |
         <%= next_link('Next 10 Ripples', ripples_next_path) %> |
-        <%= link_to 'Oldest', ripples_oldest_path %> |
+        <%= oldest_link('Oldest', ripples_oldest_path) %> |
         <%= link_to 'New Ripple', new_ripple_path %>
       </td>
     </tr>

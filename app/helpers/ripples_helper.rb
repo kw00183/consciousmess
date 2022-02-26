@@ -1,20 +1,36 @@
 module RipplesHelper
-  def previous_link(string,url)
-    if session[:max_ripple_id] == Ripple.maximum("id")
-      puts "bob1111111111111"
+  # handles the newest link enable/disable on index
+  def newest_link(string,url)
+    if session[:page_number] == 0
       return string
     else
-      puts "bob2222222222222"
       return link_to string, url
     end
   end
 
-  def next_link(string,url)
-    if session[:min_ripple_id] == 1
-      puts "bob3333333333333"
+  # handles the previous link enable/disable on index
+  def previous_link(string,url)
+    if session[:page_number] == 0
       return string
     else
-      puts "bob4444444444444"
+      return link_to string, url
+    end
+  end
+
+  # handles the next link enable/disable on index
+  def next_link(string,url)
+    if session[:page_number] == maximum_page_number
+      return string
+    else
+      return link_to string, url
+    end
+  end
+
+  # handles the oldest link enable/disable on index
+  def oldest_link(string,url)
+    if session[:page_number] == maximum_page_number
+      return string
+    else
       return link_to string, url
     end
   end
