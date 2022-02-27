@@ -36,10 +36,12 @@ module RipplesHelper
 
   # set the highest page number value
   def maximum_page_number
-    if maximum_ripple_id % 10
-      maximum_page_number = (maximum_ripple_id / 10).ceil
+    if maximum_ripple_id.remainder(10) > 0
+      maximum_page_number = (maximum_ripple_id / 10).floor
+    elsif maximum_ripple_id < 10
+      maximum_page_number = 0
     else
-      maximum_page_number = (maximum_ripple_id/ 10) - 1
+      maximum_page_number = (maximum_ripple_id / 10) - 1
     end
   end
 

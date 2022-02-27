@@ -6,28 +6,28 @@ class RipplesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should move forward and move newest" do
-    get '/ripples'
+    get ripples_url
 
     get '/next'
     assert_response :success
-    assert_select "p#message", text: "MyString_92"
+    assert_select "p#message", text: "MyMessage_190"
 
     get '/newest'
     assert_response :success
-    assert_select "p#message", text: "MyString_102"
+    assert_select "p#message", text: "MyMessage_200"
 
   end
 
   test "should go oldest and move back 10" do
-    get '/ripples'
+    get ripples_url
 
     get '/oldest'
     assert_response :success
-    assert_select "p#message", text: "MyString_2"
+    assert_select "p#message", text: "MyMessage_10"
 
     get '/previous'
     assert_response :success
-    assert_select "p#message", text: "MyString_12"
+    assert_select "p#message", text: "MyMessage_20"
   end
 
   test "should get index" do
