@@ -4,13 +4,7 @@
 
 <table>
   <tbody>
-    <!--<tr>//-->
-      <!--<td colspan="5">//-->
-        <!--<p>Page: <%= session[:page_number] %></p>//-->
-      <!--</td>//-->
-    <!--</tr>//-->
     <tr>
-      <!--<th>ID</th>//-->
       <th>Name</th>
       <th>Message</th>
       <th>Posted</th>
@@ -19,12 +13,6 @@
     <% @ripples.each do |ripple| %>
 
       <tr class="<%= cycle('list_line_odd', 'list_line_even') %>">
-
-        <!--<td>//-->
-          <!--<p>//-->
-            <!--<%= ripple.id %>//-->
-          <!--</p>//-->
-        <!--</td>//-->
 
         <td>
           <p>
