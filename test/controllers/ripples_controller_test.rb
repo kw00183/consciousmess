@@ -2,7 +2,32 @@ require "test_helper"
 
 class RipplesControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @ripple = ripples(:one)
+    @ripple = ripples(:fix_1)
+  end
+
+  test "should move forward and move newest" do
+    get '/ripples'
+
+    get '/next'
+    assert_response :success
+    assert_select "p#message", text: "MyString_92"
+
+    get '/newest'
+    assert_response :success
+    assert_select "p#message", text: "MyString_102"
+
+  end
+
+  test "should go oldest and move back 10" do
+    get '/ripples'
+
+    get '/oldest'
+    assert_response :success
+    assert_select "p#message", text: "MyString_2"
+
+    get '/previous'
+    assert_response :success
+    assert_select "p#message", text: "MyString_12"
   end
 
   test "should get index" do
@@ -20,7 +45,7 @@ class RipplesControllerTest < ActionDispatch::IntegrationTest
       post ripples_url, params: { ripple: { message: @ripple.message, name: @ripple.name, url: @ripple.url } }
     end
 
-    assert_redirected_to ripple_url(Ripple.last)
+    assert_redirected_to ripples_url
   end
 
   test "should show ripple" do

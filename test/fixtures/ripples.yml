@@ -1,11 +1,8 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
-one:
-  name: MyString
-  url: MyString
-  message: MyString
-
-two:
-  name: MyString
-  url: MyString
-  message: MyString
+<% 1.upto(200) do |i| %>
+fix_<%= i %>:
+  id: <%= i %>
+  name: MyString_<%= 1 %>
+  url: https://www.test_<%= 1 %>
+  message: MyString_<%= 1 %>
+<% end %>

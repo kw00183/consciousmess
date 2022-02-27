@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   get '/previous' => 'ripples#previous', :as => 'ripples_previous'
   get '/next' => 'ripples#next', :as => 'ripples_next'
   get '/oldest' => 'ripples#oldest', :as => 'ripples_oldest'
+  get '/:ripples/:id' => 'ripples/id', controller: 'ripples', action: 'id'
   get '*path' => redirect('/')
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end
