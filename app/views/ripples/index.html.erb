@@ -4,13 +4,13 @@
 
 <table>
   <tbody>
+    <!--<tr>//-->
+      <!--<td colspan="5">//-->
+        <!--<p>Page: <%= session[:page_number] %></p>//-->
+      <!--</td>//-->
+    <!--</tr>//-->
     <tr>
-      <td colspan="5">
-        <p>Page: <%= session[:page_number] %></p>
-      </td>
-    </tr>
-    <tr>
-      <th>ID</th>
+      <!--<th>ID</th>//-->
       <th>Name</th>
       <th>Message</th>
       <th>Posted</th>
@@ -20,19 +20,15 @@
 
       <tr class="<%= cycle('list_line_odd', 'list_line_even') %>">
 
-        <td>
-          <p>
-            <%= ripple.id %>
-          </p>
-        </td>
+        <!--<td>//-->
+          <!--<p>//-->
+            <!--<%= ripple.id %>//-->
+          <!--</p>//-->
+        <!--</td>//-->
 
         <td>
           <p>
-            <% if ripple.url == '' %>
-            <%= ripple.name %>
-            <% else %>
-            <%= link_to ripple.name, ripple.url, :target => "_blank" %>
-            <% end %>
+            <%= name_link(ripple.name, ripple.url) %>
           </p>
         </td>
 
