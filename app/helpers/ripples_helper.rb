@@ -108,11 +108,7 @@ module RipplesHelper
 
   # handles the newest link enable/disable on index
   def newest_link(string,url)
-    if get_page_number == 0
-      return string
-    else
-      return link_to string, url
-    end
+    return link_to string, url
   end
 
   # handles the previous link enable/disable on index
@@ -135,11 +131,7 @@ module RipplesHelper
 
   # handles the oldest link enable/disable on index
   def oldest_link(string,url)
-    if get_page_number == maximum_page_number
-      return string
-    else
-      return link_to string, url
-    end
+    return link_to string, url
   end
 
   # handles the name url
